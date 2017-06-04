@@ -17,10 +17,15 @@ class Graph extends PureComponent {
 					return d.id;
 				})
 			)
-			.force("charge", d3.forceManyBody())
-			.force("center", d3.forceCenter(width / 2, height / 2));
+			.force(
+				"charge",
+				d3.forceManyBody().strength(d => {
+					return -Math.pow(d.group, 3);
+				})
+			)
+			.force("center", d3.forceCenter(width / 2 - 200, height / 2 + 100));
 
-		let link = svg
+		const link = svg
 			.append("g")
 			.attr("class", "links")
 			.selectAll("line")
@@ -28,14 +33,44 @@ class Graph extends PureComponent {
 			.enter()
 			.append("line");
 
-		let node = svg
+		const getNodeColor = d => {
+			console.log(d);
+			switch (d.group) {
+				case 1: {
+					return "blue";
+				}
+				case 2: {
+					return "green";
+				}
+				case 3: {
+					return "orange";
+				}
+				case 4: {
+					return "darkGrey";
+				}
+				case 5: {
+					return "pink";
+				}
+				case 8: {
+					return "black";
+				}
+				default:
+					return "red";
+			}
+		};
+
+		const node = svg
 			.append("g")
 			.attr("class", "nodes")
 			.selectAll("circle")
 			.data(data.nodes)
 			.enter()
 			.append("circle")
-			.attr("r", 2.5);
+			.attr("r", d => {
+				return d.group * 2;
+			})
+			.attr("fill", getNodeColor)
+			.attr("stroke", "black");
 
 		node.append("title").text(d => {
 			return d.id;
@@ -69,8 +104,7 @@ class Graph extends PureComponent {
 	render() {
 		return (
 			<div>
-				<svg width="600" height="600" />
-
+				<svg width="1200" height="600" />
 			</div>
 		);
 	}
