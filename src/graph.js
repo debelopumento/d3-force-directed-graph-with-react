@@ -23,7 +23,8 @@ class Graph extends PureComponent {
 					return -Math.pow(d.group, 3);
 				})
 			)
-			.force("center", d3.forceCenter(width / 2 - 200, height / 2 + 100));
+			.force("center", d3.forceCenter(width / 2 - 200, height / 2 + 100))
+			.alphaTarget(0.1)
 
 		const link = svg
 			.append("g")
@@ -31,7 +32,8 @@ class Graph extends PureComponent {
 			.selectAll("line")
 			.data(data.links)
 			.enter()
-			.append("line");
+			.append("line")
+			.attr('opacity', 0.1)
 
 		const getNodeColor = d => {
 			switch (d.group) {
@@ -66,10 +68,12 @@ class Graph extends PureComponent {
 			.enter()
 			.append("circle")
 			.attr("r", d => {
-				return d.group;
+				return d.group / 2;
 			})
 			.attr("fill", getNodeColor)
-			.attr("stroke", "black");
+			.attr("stroke", "#222")
+			.attr('opacity', 0.1)
+
 
 		node.append("title").text(d => {
 			return d.id;
@@ -100,11 +104,15 @@ class Graph extends PureComponent {
 		};
 		simulation.nodes(data.nodes).on("tick", ticked);
 		simulation.force("link").links(data.links);
+		
+		
 	}
 	render() {
+		const width = window.innerWidth
+		const height = window.innerHeight
 		return (
-			<div>
-				<svg width="1200" height="600" />
+			<div style={{position: 'absolute', top: 0}}>
+				<svg width={width} height={height} />
 			</div>
 		);
 	}
