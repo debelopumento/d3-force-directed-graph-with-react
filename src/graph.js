@@ -34,7 +34,6 @@ class Graph extends PureComponent {
 			.append("line");
 
 		const getNodeColor = d => {
-			console.log(d);
 			switch (d.group) {
 				case 1: {
 					return "blue";
@@ -67,7 +66,7 @@ class Graph extends PureComponent {
 			.enter()
 			.append("circle")
 			.attr("r", d => {
-				return d.group * 2;
+				return d.group;
 			})
 			.attr("fill", getNodeColor)
 			.attr("stroke", "black");
@@ -90,6 +89,7 @@ class Graph extends PureComponent {
 				.attr("y2", d => {
 					return d.target.y;
 				});
+
 			node
 				.attr("cx", d => {
 					return d.x;
